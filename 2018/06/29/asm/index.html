@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Comic Sans MS:300,300italic,400,400italic,700,700italic|Comic Sans MS:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="asm," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是一篇关于汇编基本指令的博客，用于逆向基础的入门.">
+<meta name="keywords" content="asm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编基本指令（1）——数据传送指令">
+<meta property="og:url" content="http://yoursite.com/2018/06/29/asm/index.html">
+<meta property="og:site_name" content="GitO4Meqiquan&#39;s Blog">
+<meta property="og:description" content="这是一篇关于汇编基本指令的博客，用于逆向基础的入门.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-30T06:56:45.077Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="汇编基本指令（1）——数据传送指令">
+<meta name="twitter:description" content="这是一篇关于汇编基本指令的博客，用于逆向基础的入门.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/29/asm/"/>
+
+
+
+
+
+  <title>汇编基本指令（1）——数据传送指令 | GitO4Meqiquan's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GitO4Meqiquan's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/29/asm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="GitO4Meqiquan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/icon.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GitO4Meqiquan's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">汇编基本指令（1）——数据传送指令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-29T21:35:42+08:00">
+                2018-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/汇编/" itemprop="url" rel="index">
+                    <span itemprop="name">汇编</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是一篇关于汇编基本指令的博客，用于逆向基础的入门.</p>
+<a id="more"></a>
+<p>汇编指令可分为6类：数据传送、算术运算、逻辑运算、串操作、程序控制和处理器控制。</p>
+<p> <strong>数据传送指令</strong></p>
+<p>数据传送类指令可完成寄存器与寄存器之间、寄存器与存储器之间以及寄存器与I/O之间的字节或字传送，它们共同的特点是不影响标志寄存器的内容。</p>
+<h1 id="通用数据传送指令"><a href="#通用数据传送指令" class="headerlink" title="通用数据传送指令"></a>通用数据传送指令</h1><h2 id="MOV-d-s指令"><a href="#MOV-d-s指令" class="headerlink" title="MOV d,s指令"></a>MOV d,s指令</h2><p>将由源s指定的源操作数送到目标d中,其中d,s可以是寄存器，存储器中的内容，或者是立即数（就是常数）。另外，<strong>只有MOV指令是唯一允许以段寄存器作为操作数的指令</strong></p>
+<p>指令比较简单，但是有几点需要注意的:</p>
+<p>①目标d和源s所代表的位数相同，即要么都是8位的操作数，要么是16位的操作数，下面的指令是错误的</p>
+<pre><code>MOV BL,AX (AX是16位，而BL是8位)
+</code></pre><p>当把立即数存储在内存单元时，要指定内存的类型是字节还是字，例如</p>
+<pre><code>MOV BYTE PTR[SI],3  （通过BYTE PTR 指定为字节）
+MOV WORD PTR[BX],0FFH  （通过WORD PTR 指定为字）
+</code></pre><p>②s和d不能同时是存储器单元，例如下面的指令就是错误的</p>
+<pre><code>MOV [1] , [2] （两个内存单元的内容不能直接传送）
+</code></pre><p>要想交换两个内存单元的内容，可以通过寄存器来暂存</p>
+<pre><code>MOV BL,[1]
+MOV BH,[2]
+MOV [1],BH
+MOV [2],BL
+</code></pre><p>③d可以是段寄存器DS、SS和ES，但是不能是CS，因为程序运行过程中不允许随意修改CS中的内容；而s可以用所有段寄存器</p>
+<pre><code>MOV CS,BX （指令是错误的）
+MOV AX,DS （指令是正确的）
+</code></pre><p>但是，不能直接把立即数送到段寄存器中，例如</p>
+<pre><code>MOV DS,2000H （指令是错误的）
+</code></pre><p>同时，s和d不能同时为段寄存器，例如</p>
+<pre><code>MOV DS,SS   （指令是错误的）
+</code></pre><p>③IP不能作为MOV的操作数，既不能是s，也不能是d，例如</p>
+<pre><code>MOV IP, 0    （指令是错误的）
+</code></pre><p>④d不能是立即数，因为d是一个常数，并不占据空间</p>
+<pre><code>MOV 0FFH, AL  （指令是错误的）
+</code></pre><h2 id="PUSH和POP指令"><a href="#PUSH和POP指令" class="headerlink" title="PUSH和POP指令"></a>PUSH和POP指令</h2><p>堆栈是“先进后出”的存储区域，位于堆栈段SS中。并且，堆栈只有一个入口和出口，即栈顶，而SP在任何时候都指向当前堆栈段的栈顶。同时，栈顶是在低地址端，而栈底在高地址端，一旦堆栈段确定了，可用BP对堆栈段中的数据进行随机存取。不过在使用过程中，BP一般是存放上一个堆栈段的栈顶。</p>
+<h3 id="PUSH-s"><a href="#PUSH-s" class="headerlink" title="PUSH s"></a>PUSH s</h3><p>PUSH是进栈指令，将操作数s的内容进栈，其中s可以是寄存器或者存储器中的内容。<strong>注意：s是16位的数据，即进栈只能把一个字的数据进栈，不能操作字节。</strong></p>
+<pre><code>PUSH AX   （把AX中的内容进栈）
+</code></pre><p>PUSH指令执行结束后，SP会自动减2，指向当前栈顶字的低位字节。</p>
+<h3 id="POP-d"><a href="#POP-d" class="headerlink" title="POP d"></a>POP d</h3><p>POP是出栈指令，将当前栈顶的字内容出栈到d中，d可以是寄存器或者存储器地址。<strong>同样地，POP也只能处理16位，即一个字的数据。</strong></p>
+<pre><code>POP AX （把当前栈顶的一个字弹出到AX，并且高地址的内容放在AH，低地址的放在AL）
+</code></pre><p>POP指令结束后，SP会自动加2</p>
+<p><strong>堆栈的作用：</strong></p>
+<ol>
+<li>临时存放数据</li>
+<li>传递参数</li>
+<li>保存和恢复寄存器</li>
+</ol>
+<h2 id="XCHG-d-s指令"><a href="#XCHG-d-s指令" class="headerlink" title="XCHG d,s指令"></a>XCHG d,s指令</h2><p>指令的功能是将s源操作数与目的操作数d相互对应交换位置。交换可以发生在寄存器与寄存器之间，寄存器和存储器之间，但是不能再两个存储单元之间进行交换，段寄存器与IP也不能作为操作数。</p>
+<pre><code>XCHG AX,BX  （把AX与BX中的内容进行交换，与MOV的区别在于更简便）
+</code></pre><p>另外需要注意的是，两个操作数的位数要相同（同为8位或16位）</p>
+<p>例子：</p>
+<pre><code>XCHG AX,[SI+0400H]
+</code></pre><p>指令执行前的状态</p>
+<p>(CS)=1000H, (IP)=0064H, (DS)=2000H, (SI)=3000H, (AX)=1234H</p>
+<p>(23400H)=0CDH,(234001H)=0ABH</p>
+<p>指令执行后</p>
+<p>(AX)=0ABCDH</p>
+<p>(23400H)=34H,  (234001H)=12H</p>
+<p><strong>需要注意的地方</strong>是XCHG指令实质是多条MOV指令结合而成的，因此MOV指令不能做的，XCHG指令也不能做，例如不能直接实现两个存储单元内容的直接交换。</p>
+<h2 id="XLAT指令"><a href="#XLAT指令" class="headerlink" title="XLAT指令"></a>XLAT指令</h2><p>这是一条用于实现字节翻译功能的指令，又称为代码转换指令。 具体地说，它可以将<strong>AL</strong>寄存器中的内容变换为换码表格（内存中一段连续的字节单元）中的一个字节，以实现编码制的转换。</p>
+<p><strong>指令的实际执行</strong></p>
+<p>(AL)&lt;——（[BX]+[AL]）</p>
+<p>指令执行前，AL的内容作为一个256字节的表的下标。换码表的基地址放在BX中，转换后的一个字节的操作数放在AL中，即把内存单元中偏移地址为<strong>BX+AL</strong>的一个字节放到AL中。</p>
+<h1 id="目的地址传送指令"><a href="#目的地址传送指令" class="headerlink" title="目的地址传送指令"></a>目的地址传送指令</h1><p>这是一类用于8086中传送地址码的指令，可传送存储单元的逻辑地址（段地址或偏移地址）</p>
+<h2 id="LEA-d-s指令"><a href="#LEA-d-s指令" class="headerlink" title="LEA d,s指令"></a>LEA d,s指令</h2><p>把源操作数s的有效地址送到指定寄存器中。其中源操作数s必须是存储器操作数，有效地址就是16位的偏移地址，寄存器同样不能使CS和IP。例如：</p>
+<pre><code>LEA AX,[0618H]  （把内存单元的偏移量0618H送到AX，指令执行后AX=0618H)
+</code></pre><h2 id="LDS-d-s指令"><a href="#LDS-d-s指令" class="headerlink" title="LDS d,s指令"></a>LDS d,s指令</h2><p>这是取某变量的32位地址指针的指令，其功能是从源s所指定的存储单元开始，由4个连续存储单元中取出某变量的地址指针（共4个字节），将前两个字节（偏移地址）送到目标d指定的通用寄存器中，后两个字节（段地址）送到DS段寄存器中。</p>
+<pre><code>LDS SI,[100AH]  （指令执行后，从DS:100AH单元开始的4个字节（100AH,100BH,100CH,100DH）中，
+前两个字节100AH和100BH作为偏移地址放到SI中，后两个字节100CH和100DH作为段地址放到DS中）
+</code></pre><h2 id="LES-d-s指令"><a href="#LES-d-s指令" class="headerlink" title="LES d,s指令"></a>LES d,s指令</h2><p>该指令与LDS指令操作基本相同，区别仅在于后两个字节形成的段地址送到ES寄存器，而不是DS寄存器。</p>
+<pre><code>LES SI,[0010H]
+</code></pre><h1 id="标志传送指令"><a href="#标志传送指令" class="headerlink" title="标志传送指令"></a>标志传送指令</h1><p>这类指令用于传送标志位，即寄存器F中的内容</p>
+<h2 id="LAHF指令"><a href="#LAHF指令" class="headerlink" title="LAHF指令"></a>LAHF指令</h2><p>该指令将标志寄存器F的低字节（共5个状态标志位）传送到AH中。</p>
+<p>指令执行结束后，AH的对应位Di内容将发生如下改变：</p>
+<ol>
+<li>CF ——&gt; D0</li>
+<li>PF ——&gt; D2</li>
+<li>AF ——&gt; D4</li>
+<li>ZF ——&gt; D6</li>
+<li>SF ——&gt; D7</li>
+</ol>
+<h2 id="SAHF指令"><a href="#SAHF指令" class="headerlink" title="SAHF指令"></a>SAHF指令</h2><p>该指令将AH寄存器的内容传送到标志寄存器F的低字节，即与LAHF指令是相反的。通常用来将标志寄存器的5个状态标志位分别进行置位（1）或复位（0）</p>
+<h2 id="PUSHF指令"><a href="#PUSHF指令" class="headerlink" title="PUSHF指令"></a>PUSHF指令</h2><p>该指令将标志寄存器F的16位都进栈保护，过程和PUSH指令类似</p>
+<h2 id="POPF指令"><a href="#POPF指令" class="headerlink" title="POPF指令"></a>POPF指令</h2><p>将当前栈顶的字弹出到标志寄存器中（这会影响到寄存器中的内容）</p>
+<p><strong>PUSHF指令和POPF指令常成对出现，一般用在子程序和中断服务程序的首尾，用来保护和恢复主程序设计的标志寄存器的内容。</strong></p>
+<h1 id="I-O数据传送指令"><a href="#I-O数据传送指令" class="headerlink" title="I/O数据传送指令"></a>I/O数据传送指令</h1><p>这类指令用于向外设输入或数据数据。</p>
+<p>在8086中，用于寻址外设端口的地址线有16根，因此端口最多有64K个。寻址方式也有两种，即直接寻址和间接寻址</p>
+<ol>
+<li>直接寻址：只能寻址00H~0FFH前256个端口，操作数n表示端口号</li>
+<li>间接寻址：可用于寻址全部端口，DX寄存器的值就是端口号。因此对大于0FFH的端口只能采用间接寻址方式</li>
+</ol>
+<h2 id="IN-d-n指令"><a href="#IN-d-n指令" class="headerlink" title="IN d,n指令"></a>IN d,n指令</h2><p>其中d只能是AX或者AX,n是端口号，当n大于0FFH时，要先把n放进DX中，再执行IN指令，例如</p>
+<pre><code>MOV DX,1000H  
+IN  AX,DX   （指令执行后，从DXHE (DX+1）所指的两个端口读取一个字的内容送到AX中）
+</code></pre><h2 id="OUT-n，d指令"><a href="#OUT-n，d指令" class="headerlink" title="OUT n，d指令"></a>OUT n，d指令</h2><p>同样地，OUT指令中d也只能是AX或AL，n是端口号，当n大于0FFH时，同样需要先放进DX寄存器中</p>
+<pre><code>OUT 30H,AL  （指令执行后，把AL中的内容输出到30H端口）
+</code></pre><h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>到现在数据传送指令基本结束完毕，而数据传送指令可以说是最基础也是最重要的指令了，程序运行过程中离不开操作数据，也离不开获取数据的逻辑地址。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/asm/" rel="tag"># asm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/12/hello-world/" rel="next" title="个人博客">
+                <i class="fa fa-chevron-left"></i> 个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/icon.jpg"
+                alt="GitO4Meqiquan" />
+            
+              <p class="site-author-name" itemprop="name">GitO4Meqiquan</p>
+              <p class="site-description motion-element" itemprop="description">渗透|CTF</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/GitO4Meqiquan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:741217545@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#通用数据传送指令"><span class="nav-number">1.</span> <span class="nav-text">通用数据传送指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MOV-d-s指令"><span class="nav-number">1.1.</span> <span class="nav-text">MOV d,s指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PUSH和POP指令"><span class="nav-number">1.2.</span> <span class="nav-text">PUSH和POP指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PUSH-s"><span class="nav-number">1.2.1.</span> <span class="nav-text">PUSH s</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POP-d"><span class="nav-number">1.2.2.</span> <span class="nav-text">POP d</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XCHG-d-s指令"><span class="nav-number">1.3.</span> <span class="nav-text">XCHG d,s指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XLAT指令"><span class="nav-number">1.4.</span> <span class="nav-text">XLAT指令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目的地址传送指令"><span class="nav-number">2.</span> <span class="nav-text">目的地址传送指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LEA-d-s指令"><span class="nav-number">2.1.</span> <span class="nav-text">LEA d,s指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LDS-d-s指令"><span class="nav-number">2.2.</span> <span class="nav-text">LDS d,s指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LES-d-s指令"><span class="nav-number">2.3.</span> <span class="nav-text">LES d,s指令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标志传送指令"><span class="nav-number">3.</span> <span class="nav-text">标志传送指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LAHF指令"><span class="nav-number">3.1.</span> <span class="nav-text">LAHF指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SAHF指令"><span class="nav-number">3.2.</span> <span class="nav-text">SAHF指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PUSHF指令"><span class="nav-number">3.3.</span> <span class="nav-text">PUSHF指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POPF指令"><span class="nav-number">3.4.</span> <span class="nav-text">POPF指令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O数据传送指令"><span class="nav-number">4.</span> <span class="nav-text">I/O数据传送指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IN-d-n指令"><span class="nav-number">4.1.</span> <span class="nav-text">IN d,n指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OUT-n，d指令"><span class="nav-number">4.2.</span> <span class="nav-text">OUT n，d指令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GitO4Meqiquan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
