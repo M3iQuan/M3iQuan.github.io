@@ -112,7 +112,7 @@
 
 
 
-  <meta name="keywords" content="web漏洞复现," />
+  <meta name="keywords" content="web漏洞复现,redis," />
 
 
 
@@ -124,30 +124,30 @@
 
 
 <meta name="description" content="目前在学习破壳学院开设的黑客入门M1课程，在1-2黑客是如何入侵服务器实现批量挖矿这节，通过搭建环境复现redis未授权访问漏洞，体验下黑客入侵的过程。">
-<meta name="keywords" content="web漏洞复现">
+<meta name="keywords" content="web漏洞复现,redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis未授权访问漏洞复现">
 <meta property="og:url" content="http://yoursite.com/2018/09/05/review/index.html">
 <meta property="og:site_name" content="GitO4Meqiquan&#39;s Blog">
 <meta property="og:description" content="目前在学习破壳学院开设的黑客入门M1课程，在1-2黑客是如何入侵服务器实现批量挖矿这节，通过搭建环境复现redis未授权访问漏洞，体验下黑客入侵的过程。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/2018/09/05/review/Snipaste_2018-09-05_16-03-03.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-03-41.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/338ff551e24da17d4b8aaf26ea1a9ee7.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/5952c6a5d518e7d2e6a868e1e7f027af.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-15-52.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-18-48.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-19-05.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-28-40.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-29-45.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-30-01.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-46-53.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/05/review/review/Snipaste_2018-09-05_16-47-00.png">
-<meta property="og:updated_time" content="2018-09-05T11:55:45.241Z">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-03-03.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-03-41.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/338ff551e24da17d4b8aaf26ea1a9ee7.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/5952c6a5d518e7d2e6a868e1e7f027af.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-15-52.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-18-48.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-19-05.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-28-40.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-29-45.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-30-01.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-46-53.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-47-00.png">
+<meta property="og:updated_time" content="2018-09-05T12:10:05.915Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis未授权访问漏洞复现">
 <meta name="twitter:description" content="目前在学习破壳学院开设的黑客入门M1课程，在1-2黑客是如何入侵服务器实现批量挖矿这节，通过搭建环境复现redis未授权访问漏洞，体验下黑客入侵的过程。">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/05/review/2018/09/05/review/Snipaste_2018-09-05_16-03-03.png">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/05/review/Snipaste_2018-09-05_16-03-03.png">
 
 
 
@@ -435,13 +435,13 @@
 <p>VMware</p>
 <h2 id="实际过程"><a href="#实际过程" class="headerlink" title="实际过程"></a>实际过程</h2><p>一、登录kali,下载官方源码的压缩包</p>
 <pre><code>wget http://download.redis.io/releases/redis-3.2.11.tar.gz
-</code></pre><p><img src="2018/09/05/review/Snipaste_2018-09-05_16-03-03.png" alt=""></p>
+</code></pre><p><img src="Snipaste_2018-09-05_16-03-03.png" alt=""></p>
 <p>二、解压压缩包</p>
 <pre><code>tar xzf redis-3.2.11.tar.gz
 </code></pre><p>三、进入到解压后的目录</p>
 <pre><code>cd redis-3.2.11 
 </code></pre><p>并输入make执行</p>
-<p><img src="review/Snipaste_2018-09-05_16-03-41.png" alt=""></p>
+<p><img src="Snipaste_2018-09-05_16-03-41.png" alt=""></p>
 <p>四、make结束后，进入src目录：将redis-server和redis-cli拷贝到/usr/bin目录下（这样启动redis-server和redis-cli就不用每次都进入安装目录了）：</p>
 <pre><code>cp redis-server /usr/bin
 cp redis-cli /usr/bin
@@ -450,7 +450,7 @@ cp redis-cli /usr/bin
 </code></pre><p>六、编辑etc中的redis配置文件redis.conf</p>
 <pre><code>vi /etc/redis.conf
 </code></pre><p>七、去掉ip绑定，允许除本地外的主机远程登录redis服务：</p>
-<p><img src="review/338ff551e24da17d4b8aaf26ea1a9ee7.png" alt=""><br>关闭保护模式，允许远程连接redis服务<br><img src="review/5952c6a5d518e7d2e6a868e1e7f027af.png" alt=""></p>
+<p><img src="338ff551e24da17d4b8aaf26ea1a9ee7.png" alt=""><br>关闭保护模式，允许远程连接redis服务<br><img src="5952c6a5d518e7d2e6a868e1e7f027af.png" alt=""></p>
 <p>八、使用/etc目录下的redis.conf文件中的配置启动redis服务</p>
 <pre><code>redis-server /etc/redis.conf
 </code></pre><p>九、启动ssh服务</p>
@@ -463,18 +463,18 @@ cp redis-cli /usr/bin
 <pre><code>mkdir /root/.ssh
 </code></pre><p>命令，创建ssh公钥存放目录</p>
 <p>然后在B中生成ssh公钥和私钥，密码设置为空</p>
-<p><img src="review/Snipaste_2018-09-05_16-15-52.png" alt=""></p>
-<p>进入.ssh目录，将生成的公钥保存到1.txt<br><img src="review/Snipaste_2018-09-05_16-18-48.png" alt=""><br>攻击端ping一下目标主机ip，确保两台机的网络连通性<br><img src="review/Snipaste_2018-09-05_16-19-05.png" alt=""></p>
-<p>将1.txt写入redis（使用redis-cli -h ip命令连接主机A，将文件写入）：<br><img src="review/Snipaste_2018-09-05_16-28-40.png" alt=""></p>
+<p><img src="Snipaste_2018-09-05_16-15-52.png" alt=""></p>
+<p>进入.ssh目录，将生成的公钥保存到1.txt<br><img src="Snipaste_2018-09-05_16-18-48.png" alt=""><br>攻击端ping一下目标主机ip，确保两台机的网络连通性<br><img src="Snipaste_2018-09-05_16-19-05.png" alt=""></p>
+<p>将1.txt写入redis（使用redis-cli -h ip命令连接主机A，将文件写入）：<br><img src="Snipaste_2018-09-05_16-28-40.png" alt=""></p>
 <p>远程登录主机A的redis服务：redis-cli -h 192.168.14.129（靶机） 并使用CONFIG GET dir命令得到redis备份的路径，并更改redis备份路径为ssh公钥存放目录（一般默认为/root/.ssh）：</p>
-<p><img src="review/Snipaste_2018-09-05_16-29-45.png" alt=""></p>
-<p>设置上传公钥的备份文件名字为authorized_keys：<br><img src="review/Snipaste_2018-09-05_16-30-01.png" alt=""></p>
+<p><img src="Snipaste_2018-09-05_16-29-45.png" alt=""></p>
+<p>设置上传公钥的备份文件名字为authorized_keys：<br><img src="Snipaste_2018-09-05_16-30-01.png" alt=""></p>
 <p>此时要注意使用save命令保存，否则修改没有完成，没办法使用ssh登录</p>
-<p><img src="review/Snipaste_2018-09-05_16-46-53.png" alt=""></p>
+<p><img src="Snipaste_2018-09-05_16-46-53.png" alt=""></p>
 <p>在主机B使用ssh免密登录主机A：</p>
 <pre><code>ssh -i id_rsa root@192.168.14.129，
 </code></pre><p>成功登录：</p>
-<p><img src="review/Snipaste_2018-09-05_16-47-00.png" alt=""></p>
+<p><img src="Snipaste_2018-09-05_16-47-00.png" alt=""></p>
 <p>至此，我们就成功利用redis未授权访问漏洞实现了ssh免密登录目标服务器，接下来就可以使用ssh服务来进行下一步的渗透。</p>
 
       
@@ -494,6 +494,8 @@ cp redis-cli /usr/bin
         <div class="post-tags">
           
             <a href="/tags/web漏洞复现/" rel="tag"># web漏洞复现</a>
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
           
         </div>
       
@@ -617,7 +619,7 @@ cp redis-cli /usr/bin
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
