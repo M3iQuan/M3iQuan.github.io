@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>汇编基本指令（1）——数据传送指令</title>
+    <url>/2018/06/29/asm/</url>
+    <content><![CDATA[<p>这是一篇关于汇编基本指令的博客，用于逆向基础的入门.</p>
+<span id="more"></span>
+
+<p>汇编指令可分为6类：数据传送、算术运算、逻辑运算、串操作、程序控制和处理器控制。</p>
+<p> <strong>数据传送指令</strong></p>
+<p>数据传送类指令可完成寄存器与寄存器之间、寄存器与存储器之间以及寄存器与I&#x2F;O之间的字节或字传送，它们共同的特点是不影响标志寄存器的内容。</p>
+<h1 id="通用数据传送指令"><a href="#通用数据传送指令" class="headerlink" title="通用数据传送指令"></a>通用数据传送指令</h1><h2 id="MOV-d-s指令"><a href="#MOV-d-s指令" class="headerlink" title="MOV d,s指令"></a>MOV d,s指令</h2><p>将由源s指定的源操作数送到目标d中,其中d,s可以是寄存器，存储器中的内容，或者是立即数（就是常数）。另外，<strong>只有MOV指令是唯一允许以段寄存器作为操作数的指令</strong></p>
+<p>指令比较简单，但是有几点需要注意的:</p>
+<p>①目标d和源s所代表的位数相同，即要么都是8位的操作数，要么是16位的操作数，下面的指令是错误的</p>
+<pre><code>MOV BL,AX (AX是16位，而BL是8位)
+</code></pre>
+<p>当把立即数存储在内存单元时，要指定内存的类型是字节还是字，例如</p>
+<pre><code>MOV BYTE PTR[SI],3  （通过BYTE PTR 指定为字节）
+MOV WORD PTR[BX],0FFH  （通过WORD PTR 指定为字）
+</code></pre>
+<p>②s和d不能同时是存储器单元，例如下面的指令就是错误的</p>
+<pre><code>MOV [1] , [2] （两个内存单元的内容不能直接传送）
+</code></pre>
+<p>要想交换两个内存单元的内容，可以通过寄存器来暂存</p>
+<pre><code>MOV BL,[1]
+MOV BH,[2]
+MOV [1],BH
+MOV [2],BL
+</code></pre>
+<p>③d可以是段寄存器DS、SS和ES，但是不能是CS，因为程序运行过程中不允许随意修改CS中的内容；而s可以用所有段寄存器</p>
+<pre><code>MOV CS,BX （指令是错误的）
+MOV AX,DS （指令是正确的）
+</code></pre>
+<p>但是，不能直接把立即数送到段寄存器中，例如</p>
+<pre><code>MOV DS,2000H （指令是错误的）
+</code></pre>
+<p>同时，s和d不能同时为段寄存器，例如</p>
+<pre><code>MOV DS,SS   （指令是错误的）
+</code></pre>
+<p>③IP不能作为MOV的操作数，既不能是s，也不能是d，例如</p>
+<pre><code>MOV IP, 0    （指令是错误的）
+</code></pre>
+<p>④d不能是立即数，因为d是一个常数，并不占据空间</p>
+<pre><code>MOV 0FFH, AL  （指令是错误的）
+</code></pre>
+<h2 id="PUSH和POP指令"><a href="#PUSH和POP指令" class="headerlink" title="PUSH和POP指令"></a>PUSH和POP指令</h2><p>堆栈是“先进后出”的存储区域，位于堆栈段SS中。并且，堆栈只有一个入口和出口，即栈顶，而SP在任何时候都指向当前堆栈段的栈顶。同时，栈顶是在低地址端，而栈底在高地址端，一旦堆栈段确定了，可用BP对堆栈段中的数据进行随机存取。不过在使用过程中，BP一般是存放上一个堆栈段的栈顶。</p>
+<h3 id="PUSH-s"><a href="#PUSH-s" class="headerlink" title="PUSH s"></a>PUSH s</h3><p>PUSH是进栈指令，将操作数s的内容进栈，其中s可以是寄存器或者存储器中的内容。<strong>注意：s是16位的数据，即进栈只能把一个字的数据进栈，不能操作字节。</strong></p>
+<pre><code>PUSH AX   （把AX中的内容进栈）
+</code></pre>
+<p>PUSH指令执行结束后，SP会自动减2，指向当前栈顶字的低位字节。</p>
+<h3 id="POP-d"><a href="#POP-d" class="headerlink" title="POP d"></a>POP d</h3><p>POP是出栈指令，将当前栈顶的字内容出栈到d中，d可以是寄存器或者存储器地址。<strong>同样地，POP也只能处理16位，即一个字的数据。</strong></p>
+<pre><code>POP AX （把当前栈顶的一个字弹出到AX，并且高地址的内容放在AH，低地址的放在AL）
+</code></pre>
+<p>POP指令结束后，SP会自动加2</p>
+<p><strong>堆栈的作用：</strong></p>
+<ol>
+<li>临时存放数据</li>
+<li>传递参数</li>
+<li>保存和恢复寄存器</li>
+</ol>
+<h2 id="XCHG-d-s指令"><a href="#XCHG-d-s指令" class="headerlink" title="XCHG d,s指令"></a>XCHG d,s指令</h2><p>指令的功能是将s源操作数与目的操作数d相互对应交换位置。交换可以发生在寄存器与寄存器之间，寄存器和存储器之间，但是不能再两个存储单元之间进行交换，段寄存器与IP也不能作为操作数。</p>
+<pre><code>XCHG AX,BX  （把AX与BX中的内容进行交换，与MOV的区别在于更简便）
+</code></pre>
+<p>另外需要注意的是，两个操作数的位数要相同（同为8位或16位）</p>
+<p>例子：</p>
+<pre><code>XCHG AX,[SI+0400H]
+</code></pre>
+<p>指令执行前的状态</p>
+<p>(CS)&#x3D;1000H, (IP)&#x3D;0064H, (DS)&#x3D;2000H, (SI)&#x3D;3000H, (AX)&#x3D;1234H</p>
+<p>(23400H)&#x3D;0CDH,(234001H)&#x3D;0ABH</p>
+<p>指令执行后</p>
+<p>(AX)&#x3D;0ABCDH</p>
+<p>(23400H)&#x3D;34H,  (234001H)&#x3D;12H</p>
+<p><strong>需要注意的地方</strong>是XCHG指令实质是多条MOV指令结合而成的，因此MOV指令不能做的，XCHG指令也不能做，例如不能直接实现两个存储单元内容的直接交换。</p>
+<h2 id="XLAT指令"><a href="#XLAT指令" class="headerlink" title="XLAT指令"></a>XLAT指令</h2><p>这是一条用于实现字节翻译功能的指令，又称为代码转换指令。 具体地说，它可以将<strong>AL</strong>寄存器中的内容变换为换码表格（内存中一段连续的字节单元）中的一个字节，以实现编码制的转换。</p>
+<p><strong>指令的实际执行</strong></p>
+<p>(AL)&lt;——（[BX]+[AL]）</p>
+<p>指令执行前，AL的内容作为一个256字节的表的下标。换码表的基地址放在BX中，转换后的一个字节的操作数放在AL中，即把内存单元中偏移地址为<strong>BX+AL</strong>的一个字节放到AL中。</p>
+<h1 id="目的地址传送指令"><a href="#目的地址传送指令" class="headerlink" title="目的地址传送指令"></a>目的地址传送指令</h1><p>这是一类用于8086中传送地址码的指令，可传送存储单元的逻辑地址（段地址或偏移地址）</p>
+<h2 id="LEA-d-s指令"><a href="#LEA-d-s指令" class="headerlink" title="LEA d,s指令"></a>LEA d,s指令</h2><p>把源操作数s的有效地址送到指定寄存器中。其中源操作数s必须是存储器操作数，有效地址就是16位的偏移地址，寄存器同样不能使CS和IP。例如：</p>
+<pre><code>LEA AX,[0618H]  （把内存单元的偏移量0618H送到AX，指令执行后AX=0618H)
+</code></pre>
+<h2 id="LDS-d-s指令"><a href="#LDS-d-s指令" class="headerlink" title="LDS d,s指令"></a>LDS d,s指令</h2><p>这是取某变量的32位地址指针的指令，其功能是从源s所指定的存储单元开始，由4个连续存储单元中取出某变量的地址指针（共4个字节），将前两个字节（偏移地址）送到目标d指定的通用寄存器中，后两个字节（段地址）送到DS段寄存器中。</p>
+<pre><code>LDS SI,[100AH]  （指令执行后，从DS:100AH单元开始的4个字节（100AH,100BH,100CH,100DH）中，
+前两个字节100AH和100BH作为偏移地址放到SI中，后两个字节100CH和100DH作为段地址放到DS中）
+</code></pre>
+<h2 id="LES-d-s指令"><a href="#LES-d-s指令" class="headerlink" title="LES d,s指令"></a>LES d,s指令</h2><p>该指令与LDS指令操作基本相同，区别仅在于后两个字节形成的段地址送到ES寄存器，而不是DS寄存器。</p>
+<pre><code>LES SI,[0010H]
+</code></pre>
+<h1 id="标志传送指令"><a href="#标志传送指令" class="headerlink" title="标志传送指令"></a>标志传送指令</h1><p>这类指令用于传送标志位，即寄存器F中的内容</p>
+<h2 id="LAHF指令"><a href="#LAHF指令" class="headerlink" title="LAHF指令"></a>LAHF指令</h2><p>该指令将标志寄存器F的低字节（共5个状态标志位）传送到AH中。</p>
+<p>指令执行结束后，AH的对应位Di内容将发生如下改变：</p>
+<ol>
+<li>CF ——&gt; D0</li>
+<li>PF ——&gt; D2</li>
+<li>AF ——&gt; D4</li>
+<li>ZF ——&gt; D6</li>
+<li>SF ——&gt; D7</li>
+</ol>
+<h2 id="SAHF指令"><a href="#SAHF指令" class="headerlink" title="SAHF指令"></a>SAHF指令</h2><p>该指令将AH寄存器的内容传送到标志寄存器F的低字节，即与LAHF指令是相反的。通常用来将标志寄存器的5个状态标志位分别进行置位（1）或复位（0）</p>
+<h2 id="PUSHF指令"><a href="#PUSHF指令" class="headerlink" title="PUSHF指令"></a>PUSHF指令</h2><p>该指令将标志寄存器F的16位都进栈保护，过程和PUSH指令类似</p>
+<h2 id="POPF指令"><a href="#POPF指令" class="headerlink" title="POPF指令"></a>POPF指令</h2><p>将当前栈顶的字弹出到标志寄存器中（这会影响到寄存器中的内容）</p>
+<p><strong>PUSHF指令和POPF指令常成对出现，一般用在子程序和中断服务程序的首尾，用来保护和恢复主程序设计的标志寄存器的内容。</strong></p>
+<h1 id="I-x2F-O数据传送指令"><a href="#I-x2F-O数据传送指令" class="headerlink" title="I&#x2F;O数据传送指令"></a>I&#x2F;O数据传送指令</h1><p>这类指令用于向外设输入或数据数据。</p>
+<p>在8086中，用于寻址外设端口的地址线有16根，因此端口最多有64K个。寻址方式也有两种，即直接寻址和间接寻址</p>
+<ol>
+<li>直接寻址：只能寻址00H~0FFH前256个端口，操作数n表示端口号</li>
+<li>间接寻址：可用于寻址全部端口，DX寄存器的值就是端口号。因此对大于0FFH的端口只能采用间接寻址方式</li>
+</ol>
+<h2 id="IN-d-n指令"><a href="#IN-d-n指令" class="headerlink" title="IN d,n指令"></a>IN d,n指令</h2><p>其中d只能是AX或者AX,n是端口号，当n大于0FFH时，要先把n放进DX中，再执行IN指令，例如</p>
+<pre><code>MOV DX,1000H  
+IN  AX,DX   （指令执行后，从DXHE (DX+1）所指的两个端口读取一个字的内容送到AX中）
+</code></pre>
+<h2 id="OUT-n，d指令"><a href="#OUT-n，d指令" class="headerlink" title="OUT n，d指令"></a>OUT n，d指令</h2><p>同样地，OUT指令中d也只能是AX或AL，n是端口号，当n大于0FFH时，同样需要先放进DX寄存器中</p>
+<pre><code>OUT 30H,AL  （指令执行后，把AL中的内容输出到30H端口）
+</code></pre>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>到现在数据传送指令基本结束完毕，而数据传送指令可以说是最基础也是最重要的指令了，程序运行过程中离不开操作数据，也离不开获取数据的逻辑地址。</p>
+]]></content>
+      <categories>
+        <category>汇编</category>
+      </categories>
+      <tags>
+        <tag>asm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>个人博客</title>
+    <url>/2019/01/15/hello-world/</url>
+    <content><![CDATA[<p>这是我第一次搭建个人博客，期间折腾的够呛的，终于让我弄好了。先来写一篇记录一下这重要的开头吧，那么就先写下Markdown的使用方法吧.</p>
+<span id="more"></span>
+
+<h2 id="Hexo基本命令"><a href="#Hexo基本命令" class="headerlink" title="Hexo基本命令"></a>Hexo基本命令</h2><p><a href="https://hexo.io/docs/">Hexo官方文档</a></p>
+<h3 id="创建一篇新的文章"><a href="#创建一篇新的文章" class="headerlink" title="创建一篇新的文章"></a>创建一篇新的文章</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;title&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>详细信息: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="在本地预览"><a href="#在本地预览" class="headerlink" title="在本地预览"></a>在本地预览</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo s(server) [-p port]</span><br></pre></td></tr></table></figure>
+
+<p>执行命令后，如果没有出错，那么就可以通过localhost:4000来预览了，当然也可以指定端口，默认端口是4000.但是在执行命令前需要先执行下面的命令</p>
+<p>详细信息: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g(generating)</span><br></pre></td></tr></table></figure>
+
+<p>详细信息: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="发布到网站上"><a href="#发布到网站上" class="headerlink" title="发布到网站上"></a>发布到网站上</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo d(deploy)</span><br></pre></td></tr></table></figure>
+
+<p>执行完命令：hexo s 虽然可以在本地预览，但是却不能通过网址来访问，因此我们需要把网页发布到github的仓库里，这里就需要用到这个命令.</p>
+<p>详细信息: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+<p>###清楚缓存</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+
+<p>清除缓存，若是网页正常情况下可以忽略这条命令，一般会在生成静态文件前执行这条命令</p>
+<h2 id="Markdown使用手册"><a href="#Markdown使用手册" class="headerlink" title="Markdown使用手册"></a>Markdown使用手册</h2><p><a href="https://wizardforcel.gitbooks.io/markdown-simple-world/0.html">Markdown使用手册</a></p>
+<p>##标题的使用方法<br>    #第一级标题#<br>    ##第二级标题##<br>    ….<br>    ######第六级标题######</p>
+<p>显示效果就是下面这样了:<br>#第一级标题#<br>##第二级标题##</p>
+<p>…</p>
+<p>######第六级标题######</p>
+<p>##引用的方法<br>###通过在行首加上大于号&gt;来添加引用格式</p>
+<pre><code>&gt;这是一段引用的文字
+</code></pre>
+<p>显示效果就是这样滴:</p>
+<blockquote>
+<p>这是一段引用的文字</p>
+</blockquote>
+<p>当然引用还可以嵌套:</p>
+<pre><code>&gt;这是第一层引用
+&gt;&gt;这是第二层引用
+</code></pre>
+<p>显示效果就是这样的:</p>
+<blockquote>
+<p>这是第一层引用</p>
+<blockquote>
+<p>这是第二层应用</p>
+</blockquote>
+</blockquote>
+<p>##列表的使用方法<br>###无序列表使用星号、加号或是减号作为列表标记：</p>
+<p>例如:</p>
+<pre><code>*  firset
+*  seconed
+*  third
+*  ...
+</code></pre>
+<p>显示效果:</p>
+<ul>
+<li>First</li>
+<li>second</li>
+<li>third</li>
+<li>…</li>
+</ul>
+<p>也可以这样用:</p>
+<pre><code>+  A
++  B
++  C
+</code></pre>
+<p>就看到这样的结果了:</p>
+<ul>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+</ul>
+<p>同样用-号也是可以的:</p>
+<pre><code>- 1
+- 2
+- 3
+</code></pre>
+<ul>
+<li>1</li>
+<li>2</li>
+<li>3</li>
+</ul>
+<p>###有序列表则使用数字接着一个英文句点：</p>
+<pre><code>1. A
+2. B
+3. C
+</code></pre>
+<ol>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+</ol>
+<p>##代码区域<br>###有两种方式标记代码区域，原生风格是行首缩进4个空格</p>
+<pre><code>这是段落
+    这是一个代码块
+</code></pre>
+<p>就可以显示这样了:</p>
+<p>这是段落</p>
+<pre><code>这是一个代码块
+</code></pre>
+<p>###还有一种是github的风格，代码段的前后用三个反引号独占一行来标记。</p>
+<pre><code><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">这是代码</span><br></pre></td></tr></table></figure>
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">这是代码</span><br></pre></td></tr></table></figure>
+
+
+<p>##链接的使用<br>    <a href="http://example.com/">an example</a><br>    <a href="http://example.com/" title="Optional Title">an example</a></p>
+<p>会被解释为:</p>
+<pre><code>&lt;a href=&#39;http://example.com/&#39;&gt;an example&lt;/a&gt;
+&lt;a href=&#39;http://example.com/&#39; title=&quot;Optional Title&quot;&gt;an example&lt;/a&gt;
+</code></pre>
+<h2 id="图像的使用"><a href="#图像的使用" class="headerlink" title="图像的使用##"></a>图像的使用##</h2><pre><code>![Alt text](/path/to/img.jpg)
+![Alt text](/path/to/img.jpg &quot;Optional Title&quot;)
+</code></pre>
+<p>会被解释为:</p>
+<pre><code>&lt;img src=&#39;/path/to/img.jpg&#39; alt=&#39;Alt text&#39; /&gt;
+&lt;img src=&#39;/path/to/img.jpg&#39; alt=&#39;Alt text&#39; title=&#39;Optional Title&#39; /&gt;
+</code></pre>
+<p>但是图片的使用会比较麻烦，如果图片比较少，那么可以放到source&#x2F;images中，同时通过markdown语法访问.</p>
+<pre><code>source/images/logo.jpg
+![](/images/logo.jpg)
+</code></pre>
+<p>这样的话图片既可以在首页中看到，也可以在文章中看到.</p>
+<p>另外还有一种相对路径可以使用.即把图片放在文章所在目录下的同名文件夹中. 文章的目录可以通过配置_config.yml来生成</p>
+<pre><code>_config.yml
+post_asset_folder: true
+</code></pre>
+<p>将<code>_config.yml</code>文件中的配置项<code>post_asset_folder</code>设置为<code>true</code>后，执行命令<code>$hexo new title</code>,在<code>source/posts</code>中会生成文章<code>title.md</code>和同名文件夹<code>title</code>。然后将图片放在<code>title</code>文件中，我们就可以使用相对路径引用图片了</p>
+<pre><code>_posts/title/picture.jpg
+![](picture.jpg)
+</code></pre>
+<p>这种相对路径引用图片可以在文章中显示，但是无法再首页中显示.</p>
+<p>如果希望图片在文章和首页同时显示，就可以使用标签插件的语法</p>
+<pre><code>_post/title/picture.jpg
+&#123;% asset_img picture.jpg This is an example %&#125;
+</code></pre>
+<p>##转义##</p>
+<p>###markdown支持在以下字符前面插入反斜杠###</p>
+<pre><code>\   反斜线
+`   反引号
+*   星号
+_   底线
+&#123;&#125;  花括号
+[]  方括号
+()  括弧
+#   井字号
++   加号
+-   减号
+.   英文句点
+!   惊叹号
+</code></pre>
+<p>##表格的使用##</p>
+<pre><code>| Item     | Value | Qty   |
+| :------- | ----: | :---: |
+| Computer | $1600 |  5    |
+| Phone    | $12   |  12   |
+| Pipe     | $1    |  234  |
+</code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>redis未授权访问漏洞复现</title>
+    <url>/2018/09/05/review/</url>
+    <content><![CDATA[<p>目前在学习破壳学院开设的黑客入门M1课程，在1-2黑客是如何入侵服务器实现批量挖矿这节，通过搭建环境复现redis未授权访问漏洞，体验下黑客入侵的过程。</p>
+<span id="more"></span>
+
+<h1 id="漏洞间介及危害"><a href="#漏洞间介及危害" class="headerlink" title="漏洞间介及危害"></a>漏洞间介及危害</h1><h2 id="redis简介"><a href="#redis简介" class="headerlink" title="redis简介"></a>redis简介</h2><p>Redis (Remote Dictionary Server) is an open-source in-memory database project implementing a distributed, in-memory key-value store with optional durability.<br>Redis（远程字典服务器）是一个开源的内存数据库项目，实现了一个分布式，内存中的键值存储，具有可选的持久性。也就是一个类似数据库的软件，在服务器中使用。</p>
+<h2 id="什么是redis未授权访问漏洞"><a href="#什么是redis未授权访问漏洞" class="headerlink" title="什么是redis未授权访问漏洞"></a>什么是redis未授权访问漏洞</h2><p>Redis默认情况下，会绑定在0.0.0.0:6379下，如果没有采用相关的策略，比如添加防火墙规则避免其他非信任ip访问等，这样将会将redis服务暴露到公网上。如果没有设置密码认证（一般为空）的情况下，会导致任意用户在可以访问目标服务器的情况下未授权访问Redis以及读取Redis的数据。攻击者在未授权访问Redis的情况下，利用Redis自身提供的config命令，可以进行写文件操作，攻击者可以成功将自己的ssh公钥写入目标服务器的&#x2F;root&#x2F;.ssh文件夹的authotrized_keys文件中，进而可以使用对应的私钥直接使用ssh服务登录目标服务器。</p>
+<p>总的来说，漏洞的产生条件有以下两点:</p>
+<ol>
+<li>redis绑定在0.0.0.0:6379下，且没有进行添加防火墙规则避免其他非信任来源ip访问等相关安全策略，直接暴露在公网下</li>
+<li>没有设置密码认证，可以免密码远程登录redis服务</li>
+</ol>
+<h2 id="漏洞的危害"><a href="#漏洞的危害" class="headerlink" title="漏洞的危害"></a>漏洞的危害</h2><ol>
+<li>攻击者无需认证可以访问到内部数据，可能导致敏感信息泄露，黑客也可以恶意执行flushall来清空所有数据（flushall命令是redis的命令，其功能是清空整个redis服务器的数据，删除所有数据库的所有Key)</li>
+<li>攻击者通过EVAL执行Lua代码，或通过数据备份功能往磁盘写入后门文件</li>
+<li>最严重的情况，如果redis以root身份运行，黑客可以给root账户写入ssh公钥文件，直接通过ssh登录服务器</li>
+</ol>
+<h1 id="漏洞的复现和利用"><a href="#漏洞的复现和利用" class="headerlink" title="漏洞的复现和利用"></a>漏洞的复现和利用</h1><h2 id="SSH免密登录原理简介"><a href="#SSH免密登录原理简介" class="headerlink" title="SSH免密登录原理简介"></a>SSH免密登录原理简介</h2><p>Secure Shell（安全外壳协议，简称SSH）是一种加密的网络传输协议，可在不安全的网络中为网络服务提供安全的传输环境。</p>
+<p>SSH提供两种登录验证方式，一种是口令验证也就是账户密码登录，另一种是密钥验证也就是我们想要的免密登录。所谓的密钥验证，其实是基于公钥密码的认证，使用公钥加密和私钥解密，其中公钥是可以公开的，放在服务器端，而私钥是保密的，并且公钥加密的信息只有私钥才能解密，大致过程如下：</p>
+<ol>
+<li>客户端生成私钥和公钥，并把公钥拷贝给服务器端；</li>
+<li>客户端发起登录请求，发送自己的信息；</li>
+<li>服务器端根据客户端发送的信息来查找是否有该客户端的公钥，若没有则拒绝登录，若有则生成一段随机数并且使用公钥加密后发送给客户端；</li>
+<li>客户端收到服务器发来的加密信息后用私钥解密，并把解密后的结果发给服务器用于验证；</li>
+<li>服务器收到客户端发来的解密结果，与自己刚才生成的随机数比对，若一样则允许登录，不一样则拒绝登录。</li>
+</ol>
+<h2 id="漏洞环境搭建"><a href="#漏洞环境搭建" class="headerlink" title="漏洞环境搭建"></a>漏洞环境搭建</h2><p>Kali linux </p>
+<p>VMware</p>
+<h2 id="实际过程"><a href="#实际过程" class="headerlink" title="实际过程"></a>实际过程</h2><p>一、登录kali,下载官方源码的压缩包</p>
+<pre><code>wget http://download.redis.io/releases/redis-3.2.11.tar.gz
+</code></pre>
+<p><img src="/Snipaste_2018-09-05_16-03-03.png"></p>
+<p>二、解压压缩包</p>
+<pre><code>tar xzf redis-3.2.11.tar.gz
+</code></pre>
+<p>三、进入到解压后的目录</p>
+<pre><code>cd redis-3.2.11 
+</code></pre>
+<p>并输入make执行</p>
+<p><img src="/Snipaste_2018-09-05_16-03-41.png"></p>
+<p>四、make结束后，进入src目录：将redis-server和redis-cli拷贝到&#x2F;usr&#x2F;bin目录下（这样启动redis-server和redis-cli就不用每次都进入安装目录了）：</p>
+<pre><code> cp redis-server /usr/bin
+ cp redis-cli /usr/bin
+</code></pre>
+<p>五、返回目录redis-3.2.11，将redis.conf拷贝到&#x2F;etc&#x2F;目录下：</p>
+<pre><code> cp redis.conf /etc
+</code></pre>
+<p>六、编辑etc中的redis配置文件redis.conf</p>
+<pre><code>  vi /etc/redis.conf
+</code></pre>
+<p>七、去掉ip绑定，允许除本地外的主机远程登录redis服务：</p>
+<p><img src="/338ff551e24da17d4b8aaf26ea1a9ee7.png"><br>关闭保护模式，允许远程连接redis服务<br><img src="/5952c6a5d518e7d2e6a868e1e7f027af.png"></p>
+<p>八、使用&#x2F;etc目录下的redis.conf文件中的配置启动redis服务</p>
+<pre><code>   redis-server /etc/redis.conf
+</code></pre>
+<p>九、启动ssh服务</p>
+<p> kali安装有ssh服务，但默认没有启动，需使用service ssh start命令启动ssh服务。</p>
+<p>十、复制虚拟机，一个作为靶机，一个作为攻击端，至此漏洞环境便已经搭建完毕，此时的redis服务是可以以root用户身份远程免密码登录的。</p>
+<p>将其中一台作为靶机A(192.168.14.129)，另一台作为攻击端(192.168.25.240)</p>
+<p>首先在靶机A中开启redis服务:</p>
+<pre><code>redis-server /etc/redis.conf
+</code></pre>
+<p>在靶机A中执行</p>
+<pre><code>mkdir /root/.ssh
+</code></pre>
+<p>命令，创建ssh公钥存放目录</p>
+<p>然后在B中生成ssh公钥和私钥，密码设置为空</p>
+<p><img src="/Snipaste_2018-09-05_16-15-52.png"></p>
+<p>进入.ssh目录，将生成的公钥保存到1.txt<br><img src="/Snipaste_2018-09-05_16-18-48.png"><br>攻击端ping一下目标主机ip，确保两台机的网络连通性<br><img src="/Snipaste_2018-09-05_16-19-05.png"></p>
+<p>将1.txt写入redis（使用redis-cli -h ip命令连接主机A，将文件写入）：<br><img src="/Snipaste_2018-09-05_16-28-40.png"></p>
+<p>远程登录主机A的redis服务：redis-cli -h 192.168.14.129（靶机） 并使用CONFIG GET dir命令得到redis备份的路径，并更改redis备份路径为ssh公钥存放目录（一般默认为&#x2F;root&#x2F;.ssh）：</p>
+<p><img src="/Snipaste_2018-09-05_16-29-45.png"></p>
+<p>设置上传公钥的备份文件名字为authorized_keys：<br><img src="/Snipaste_2018-09-05_16-30-01.png"></p>
+<p>此时要注意使用save命令保存，否则修改没有完成，没办法使用ssh登录</p>
+<p><img src="/Snipaste_2018-09-05_16-46-53.png"></p>
+<p>在主机B使用ssh免密登录主机A：</p>
+<pre><code>    ssh -i id_rsa root@192.168.14.129，
+</code></pre>
+<p>成功登录：</p>
+<p><img src="/Snipaste_2018-09-05_16-47-00.png"></p>
+<p>至此，我们就成功利用redis未授权访问漏洞实现了ssh免密登录目标服务器，接下来就可以使用ssh服务来进行下一步的渗透。</p>
+]]></content>
+      <categories>
+        <category>M1课程</category>
+      </categories>
+      <tags>
+        <tag>web漏洞复现</tag>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+</search>
