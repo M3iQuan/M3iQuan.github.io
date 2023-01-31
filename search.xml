@@ -126,44 +126,42 @@ IN  AX,DX   （指令执行后，从DXHE (DX+1）所指的两个端口读取一�
   <entry>
     <title>个人博客</title>
     <url>/2019/01/15/hello-world/</url>
-    <content><![CDATA[<p>这是我第一次搭建个人博客，期间折腾的够呛的，终于让我弄好了。先来写一篇记录一下这重要的开头吧，那么就先写下Markdown的使用方法吧.</p>
+    <content><![CDATA[<p>这是我第一次搭建个人博客，期间折腾的够呛的，终于让我弄好了。先来写一篇使用方法和写作Markdown的使用方法的博客.</p>
 <span id="more"></span>
 
-<h2 id="Hexo基本命令"><a href="#Hexo基本命令" class="headerlink" title="Hexo基本命令"></a>Hexo基本命令</h2><p><a href="https://hexo.io/docs/">Hexo官方文档</a></p>
-<h3 id="创建一篇新的文章"><a href="#创建一篇新的文章" class="headerlink" title="创建一篇新的文章"></a>创建一篇新的文章</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;title&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Hexo基本命令"><a href="#Hexo基本命令" class="headerlink" title="Hexo基本命令"></a>Hexo基本命令</h2><p>Hexo作为一款静态博客生成框架，有很多人都在使用，因此<a href="https://hexo.io/docs/">Hexo官方文档</a>记录十分齐全。</p>
+<h3 id="创建一篇新的文章"><a href="#创建一篇新的文章" class="headerlink" title="创建一篇新的文章"></a>创建一篇新的文章</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;title&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p>详细信息: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="在本地预览"><a href="#在本地预览" class="headerlink" title="在本地预览"></a>在本地预览</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo s(server) [-p port]</span><br></pre></td></tr></table></figure>
+<p>更详细的信息可以到官网上查看: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="在本地预览"><a href="#在本地预览" class="headerlink" title="在本地预览"></a>在本地预览</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo s(server) [-p port]</span><br></pre></td></tr></table></figure>
 
 <p>执行命令后，如果没有出错，那么就可以通过localhost:4000来预览了，当然也可以指定端口，默认端口是4000.但是在执行命令前需要先执行下面的命令</p>
-<p>详细信息: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g(generating)</span><br></pre></td></tr></table></figure>
+<p>更详细的信息可以到官网上查看: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g(generating)</span><br></pre></td></tr></table></figure>
 
-<p>详细信息: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="发布到网站上"><a href="#发布到网站上" class="headerlink" title="发布到网站上"></a>发布到网站上</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo d(deploy)</span><br></pre></td></tr></table></figure>
+<p>更详细的信息可以到官网上查看: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="发布到网站上"><a href="#发布到网站上" class="headerlink" title="发布到网站上"></a>发布到网站上</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d(deploy)</span><br></pre></td></tr></table></figure>
 
 <p>执行完命令：hexo s 虽然可以在本地预览，但是却不能通过网址来访问，因此我们需要把网页发布到github的仓库里，这里就需要用到这个命令.</p>
-<p>详细信息: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
-<p>###清楚缓存</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+<p>更详细的信息可以到官网上查看: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+<h3 id="清除缓存"><a href="#清除缓存" class="headerlink" title="清除缓存"></a>清除缓存</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure>
 
 <p>清除缓存，若是网页正常情况下可以忽略这条命令，一般会在生成静态文件前执行这条命令</p>
-<h2 id="Markdown使用手册"><a href="#Markdown使用手册" class="headerlink" title="Markdown使用手册"></a>Markdown使用手册</h2><p><a href="https://wizardforcel.gitbooks.io/markdown-simple-world/0.html">Markdown使用手册</a></p>
-<p>##标题的使用方法<br>    #第一级标题#<br>    ##第二级标题##<br>    ….<br>    ######第六级标题######</p>
-<p>显示效果就是下面这样了:<br>#第一级标题#<br>##第二级标题##</p>
-<p>…</p>
-<p>######第六级标题######</p>
-<p>##引用的方法<br>###通过在行首加上大于号&gt;来添加引用格式</p>
-<pre><code>&gt;这是一段引用的文字
-</code></pre>
+<h2 id="Markdown使用手册"><a href="#Markdown使用手册" class="headerlink" title="Markdown使用手册"></a>Markdown使用手册</h2><p>Markdown常用于笔记的使用，因为其语法较简单并且好看，受到很多人的关注，因此网上也有很多关于Markdown的使用方式:<a href="https://wizardforcel.gitbooks.io/markdown-simple-world/0.html">Markdown使用手册</a></p>
+<h2 id="标题的使用方法"><a href="#标题的使用方法" class="headerlink" title="标题的使用方法"></a>标题的使用方法</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># 第一级标题</span></span><br><span class="line"><span class="section">## 第二级标题</span></span><br><span class="line">....</span><br><span class="line"><span class="section">###### 第六级标题</span></span><br></pre></td></tr></table></figure>
+
+<p>显示效果就是下面这样了:</p>
+<h1 id="第一级标题"><a href="#第一级标题" class="headerlink" title="第一级标题"></a>第一级标题</h1><h2 id="第二级标题"><a href="#第二级标题" class="headerlink" title="第二级标题"></a>第二级标题</h2><p>….</p>
+<h6 id="第六级标题"><a href="#第六级标题" class="headerlink" title="第六级标题"></a>第六级标题</h6><h2 id="引用的方法"><a href="#引用的方法" class="headerlink" title="引用的方法"></a>引用的方法</h2><p>通过在行首加上大于号&gt;来添加引用格式</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="quote">&gt; 这是一段引用的文字</span></span><br></pre></td></tr></table></figure>
+
 <p>显示效果就是这样滴:</p>
 <blockquote>
 <p>这是一段引用的文字</p>
 </blockquote>
 <p>当然引用还可以嵌套:</p>
-<pre><code>&gt;这是第一层引用
-&gt;&gt;这是第二层引用
-</code></pre>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="quote">&gt; 这是第一层引用</span></span><br><span class="line"><span class="code">    &gt;&gt; 这是第二层引用</span></span><br></pre></td></tr></table></figure>
+
 <p>显示效果就是这样的:</p>
 <blockquote>
 <p>这是第一层引用</p>
@@ -171,13 +169,9 @@ IN  AX,DX   （指令执行后，从DXHE (DX+1）所指的两个端口读取一�
 <p>这是第二层应用</p>
 </blockquote>
 </blockquote>
-<p>##列表的使用方法<br>###无序列表使用星号、加号或是减号作为列表标记：</p>
-<p>例如:</p>
-<pre><code>*  firset
-*  seconed
-*  third
-*  ...
-</code></pre>
+<h2 id="列表的使用方法"><a href="#列表的使用方法" class="headerlink" title="列表的使用方法"></a>列表的使用方法</h2><h3 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h3><p>无序列表使用星号、加号或是减号作为列表标记,例如:</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">*</span>  firset</span><br><span class="line"><span class="bullet">*</span>  seconed</span><br><span class="line"><span class="bullet">*</span>  third</span><br><span class="line"><span class="bullet">*</span>  ...</span><br></pre></td></tr></table></figure>
+
 <p>显示效果:</p>
 <ul>
 <li>First</li>
@@ -186,10 +180,8 @@ IN  AX,DX   （指令执行后，从DXHE (DX+1）所指的两个端口读取一�
 <li>…</li>
 </ul>
 <p>也可以这样用:</p>
-<pre><code>+  A
-+  B
-+  C
-</code></pre>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">+</span>  A</span><br><span class="line"><span class="bullet">+</span>  B</span><br><span class="line"><span class="bullet">+</span>  C</span><br></pre></td></tr></table></figure>
+
 <p>就看到这样的结果了:</p>
 <ul>
 <li>A</li>
@@ -197,92 +189,53 @@ IN  AX,DX   （指令执行后，从DXHE (DX+1）所指的两个端口读取一�
 <li>C</li>
 </ul>
 <p>同样用-号也是可以的:</p>
-<pre><code>- 1
-- 2
-- 3
-</code></pre>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> 1</span><br><span class="line"><span class="bullet">-</span> 2</span><br><span class="line"><span class="bullet">-</span> 3</span><br></pre></td></tr></table></figure>
+
+<p>显示效果:</p>
 <ul>
 <li>1</li>
 <li>2</li>
 <li>3</li>
 </ul>
-<p>###有序列表则使用数字接着一个英文句点：</p>
-<pre><code>1. A
-2. B
-3. C
-</code></pre>
+<h3 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h3><p>有序列表则使用数字接着一个英文句点：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> A</span><br><span class="line"><span class="bullet">2.</span> B</span><br><span class="line"><span class="bullet">3.</span> C</span><br></pre></td></tr></table></figure>
+
+<p>显示效果:</p>
 <ol>
 <li>A</li>
 <li>B</li>
 <li>C</li>
 </ol>
-<p>##代码区域<br>###有两种方式标记代码区域，原生风格是行首缩进4个空格</p>
-<pre><code>这是段落
-    这是一个代码块
-</code></pre>
-<p>就可以显示这样了:</p>
-<p>这是段落</p>
-<pre><code>这是一个代码块
-</code></pre>
-<p>###还有一种是github的风格，代码段的前后用三个反引号独占一行来标记。</p>
-<pre><code><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">这是代码</span><br></pre></td></tr></table></figure>
-</code></pre>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">这是代码</span><br></pre></td></tr></table></figure>
+<h2 id="代码区域"><a href="#代码区域" class="headerlink" title="代码区域"></a>代码区域</h2><p>代码段的前后用三个反引号独占一行来标记:</p>
+<h2 id="链接的使用"><a href="#链接的使用" class="headerlink" title="链接的使用"></a>链接的使用</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">[<span class="string">an example</span>](<span class="link">http://example.com/</span>)</span><br><span class="line"></span><br><span class="line">[<span class="string">an example</span>](<span class="link">http://example.com/ &quot;Optional Title&quot;</span>)</span><br></pre></td></tr></table></figure>
 
+<p>会被解释为:</p>
+<p><a href='http://example.com/'>an example</a></p>
+<p><a href='http://example.com/' title="Optional Title">an example</a></p>
+<h2 id="图像的使用"><a href="#图像的使用" class="headerlink" title="图像的使用"></a>图像的使用</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">Alt text</span>](<span class="link">/path/to/img.jpg</span>)</span><br><span class="line">![<span class="string">Alt text</span>](<span class="link">/path/to/img.jpg &quot;Optional Title&quot;</span>)</span><br></pre></td></tr></table></figure>
 
-<p>##链接的使用<br>    <a href="http://example.com/">an example</a><br>    <a href="http://example.com/" title="Optional Title">an example</a></p>
 <p>会被解释为:</p>
-<pre><code>&lt;a href=&#39;http://example.com/&#39;&gt;an example&lt;/a&gt;
-&lt;a href=&#39;http://example.com/&#39; title=&quot;Optional Title&quot;&gt;an example&lt;/a&gt;
-</code></pre>
-<h2 id="图像的使用"><a href="#图像的使用" class="headerlink" title="图像的使用##"></a>图像的使用##</h2><pre><code>![Alt text](/path/to/img.jpg)
-![Alt text](/path/to/img.jpg &quot;Optional Title&quot;)
-</code></pre>
-<p>会被解释为:</p>
-<pre><code>&lt;img src=&#39;/path/to/img.jpg&#39; alt=&#39;Alt text&#39; /&gt;
-&lt;img src=&#39;/path/to/img.jpg&#39; alt=&#39;Alt text&#39; title=&#39;Optional Title&#39; /&gt;
-</code></pre>
+<img src='/path/to/img.jpg' alt='Alt text' />
+<img src='/path/to/img.jpg' alt='Alt text' title='Optional Title' />
+
 <p>但是图片的使用会比较麻烦，如果图片比较少，那么可以放到source&#x2F;images中，同时通过markdown语法访问.</p>
-<pre><code>source/images/logo.jpg
-![](/images/logo.jpg)
-</code></pre>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">source/images/logo.jpg</span><br><span class="line">![](<span class="link">/images/logo.jpg</span>)</span><br></pre></td></tr></table></figure>
+
 <p>这样的话图片既可以在首页中看到，也可以在文章中看到.</p>
 <p>另外还有一种相对路径可以使用.即把图片放在文章所在目录下的同名文件夹中. 文章的目录可以通过配置_config.yml来生成</p>
-<pre><code>_config.yml
-post_asset_folder: true
-</code></pre>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="emphasis">_config.yml</span></span><br><span class="line"><span class="emphasis">post_</span>asset<span class="emphasis">_folder: true</span></span><br></pre></td></tr></table></figure>
+
 <p>将<code>_config.yml</code>文件中的配置项<code>post_asset_folder</code>设置为<code>true</code>后，执行命令<code>$hexo new title</code>,在<code>source/posts</code>中会生成文章<code>title.md</code>和同名文件夹<code>title</code>。然后将图片放在<code>title</code>文件中，我们就可以使用相对路径引用图片了</p>
-<pre><code>_posts/title/picture.jpg
-![](picture.jpg)
-</code></pre>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="emphasis">_posts/title/picture.jpg</span></span><br><span class="line"><span class="emphasis">![](<span class="link">picture.jpg</span>)</span></span><br></pre></td></tr></table></figure>
+
 <p>这种相对路径引用图片可以在文章中显示，但是无法再首页中显示.</p>
 <p>如果希望图片在文章和首页同时显示，就可以使用标签插件的语法</p>
-<pre><code>_post/title/picture.jpg
-&#123;% asset_img picture.jpg This is an example %&#125;
-</code></pre>
-<p>##转义##</p>
-<p>###markdown支持在以下字符前面插入反斜杠###</p>
-<pre><code>\   反斜线
-`   反引号
-*   星号
-_   底线
-&#123;&#125;  花括号
-[]  方括号
-()  括弧
-#   井字号
-+   加号
--   减号
-.   英文句点
-!   惊叹号
-</code></pre>
-<p>##表格的使用##</p>
-<pre><code>| Item     | Value | Qty   |
-| :------- | ----: | :---: |
-| Computer | $1600 |  5    |
-| Phone    | $12   |  12   |
-| Pipe     | $1    |  234  |
-</code></pre>
-]]></content>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="emphasis">_post/title/picture.jpg</span></span><br><span class="line"><span class="emphasis">&#123;% asset_</span>img picture.jpg This is an example %&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h2><p>markdown支持在以下字符前面插入反斜杠</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">\   反斜线</span><br><span class="line">`   反引号</span><br><span class="line"><span class="bullet">*</span>   星号</span><br><span class="line">_   底线</span><br><span class="line">&#123;&#125;  花括号</span><br><span class="line">[]  方括号</span><br><span class="line">()  括弧</span><br><span class="line"><span class="section">#   井字号</span></span><br><span class="line"><span class="bullet">+</span>   加号</span><br><span class="line"><span class="bullet">-</span>   减号</span><br><span class="line">.   英文句点</span><br><span class="line">!   惊叹号</span><br></pre></td></tr></table></figure>
+
+<h2 id="表格的使用"><a href="#表格的使用" class="headerlink" title="表格的使用"></a>表格的使用</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">| Item     | Value | Qty   |</span><br><span class="line">| :------- | ----: | :---: |</span><br><span class="line">| Computer | $1600 |  5    |</span><br><span class="line">| Phone    | $12   |  12   |</span><br><span class="line">| Pipe     | $1    |  234  |</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
   <entry>
     <title>redis未授权访问漏洞复现</title>
